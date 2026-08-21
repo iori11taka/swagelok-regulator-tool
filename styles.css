@@ -2068,3 +2068,65 @@ html[data-theme="dark"] .result-mascot-copy small{
 .result-mascot-copy{
   box-shadow:0 7px 18px rgba(20,45,72,.06);
 }
+
+/* =========================================================
+   RETURN TO TOOLS PORTAL
+========================================================= */
+
+.portal-return-btn {
+  height: 38px;
+  padding: 0 13px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 8px;
+
+  background: rgba(255, 255, 255, 0.035);
+  color: #d9e0e9;
+
+  text-decoration: none;
+  font-size: 12px;
+  font-weight: 700;
+
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease,
+    transform 0.15s ease;
+}
+
+.portal-return-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.25);
+  color: #ffffff;
+}
+
+.portal-return-btn:active {
+  transform: translateY(1px);
+}
+
+.portal-return-arrow {
+  font-size: 15px;
+  line-height: 1;
+  opacity: 0.85;
+}
+
+/* Responsive */
+@media (max-width: 620px) {
+  .portal-return-btn {
+    width: 38px;
+    padding: 0;
+  }
+
+  .portal-return-btn span:last-child {
+    display: none;
+  }
+
+  .portal-return-arrow {
+    font-size: 16px;
+  }
+}
