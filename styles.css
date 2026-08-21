@@ -2130,3 +2130,67 @@ html[data-theme="dark"] .result-mascot-copy small{
     font-size: 16px;
   }
 }
+
+/* =========================================================
+   BOTÓN VOLVER AL PORTAL
+========================================================= */
+
+.portal-return-btn {
+  height: 38px;
+  padding: 0 13px;
+
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 7px;
+
+  border: 1px solid rgba(255, 255, 255, 0.14);
+  border-radius: 8px;
+
+  background: rgba(255, 255, 255, 0.035);
+
+  color: #d9e0e9 !important;
+  text-decoration: none !important;
+
+  font-size: 12px;
+  font-weight: 700;
+
+  white-space: nowrap;
+
+  transition:
+    background 0.15s ease,
+    border-color 0.15s ease,
+    color 0.15s ease,
+    transform 0.15s ease;
+}
+
+.portal-return-btn:visited {
+  color: #d9e0e9 !important;
+}
+
+.portal-return-btn:hover {
+  background: rgba(255, 255, 255, 0.08);
+  border-color: rgba(255, 255, 255, 0.25);
+  color: #ffffff !important;
+}
+
+.portal-return-btn:active {
+  transform: translateY(1px);
+}
+
+.portal-return-arrow {
+  font-size: 15px;
+  line-height: 1;
+  opacity: 0.85;
+}
+
+@media (max-width: 620px) {
+  .portal-return-btn {
+    width: 38px;
+    padding: 0;
+  }
+
+  .portal-return-btn span:last-child {
+    display: none;
+  }
+}
