@@ -17,26 +17,13 @@
     const closeHelp = byId("closeHelpButton");
     const closeSettings = byId("closeSettingsButton");
 
-    if (!backdrop || !helpDrawer || !settingsModal) return;
-
-    // =========================================
-    // PANEL / MODAL CONTROL
-    // =========================================
-
-    function showBackdrop() {
-      backdrop.hidden = false;
-      document.body.classList.add("panel-open");
+    if (!backdrop || !helpDrawer || !settingsModal) {
+      return;
     }
 
-    function hideBackdropIfIdle() {
-      if (
-        !helpDrawer.classList.contains("open") &&
-        !settingsModal.classList.contains("open")
-      ) {
-        backdrop.hidden = true;
-        document.body.classList.remove("panel-open");
-      }
-    }
+    // =====================================================
+    // OPEN / CLOSE HELP
+    // =====================================================
 
     function openHelp() {
       settingsModal.classList.remove("open");
@@ -45,7 +32,8 @@
       helpDrawer.classList.add("open");
       helpDrawer.setAttribute("aria-hidden", "false");
 
-      showBackdrop();
+      backdrop.hidden = false;
+      document.body.classList.add("panel-open");
     }
 
     function closeHelpPanel() {
@@ -55,6 +43,10 @@
       hideBackdropIfIdle();
     }
 
+    // =====================================================
+    // OPEN / CLOSE SETTINGS
+    // =====================================================
+
     function openSettings() {
       helpDrawer.classList.remove("open");
       helpDrawer.setAttribute("aria-hidden", "true");
@@ -62,7 +54,8 @@
       settingsModal.classList.add("open");
       settingsModal.setAttribute("aria-hidden", "false");
 
-      showBackdrop();
+      backdrop.hidden = false;
+      document.body.classList.add("panel-open");
     }
 
     function closeSettingsPanel() {
@@ -71,6 +64,10 @@
 
       hideBackdropIfIdle();
     }
+
+    // =====================================================
+    // CLOSE EVERYTHING
+    // =====================================================
 
     function closeAll() {
       helpDrawer.classList.remove("open");
@@ -84,101 +81,109 @@
       document.body.classList.remove("panel-open");
     }
 
-    // =========================================
+    // =====================================================
+    // BACKDROP
+    // =====================================================
+
+    function hideBackdropIfIdle() {
+      const helpOpen =
+        helpDrawer.classList.contains("open");
+
+      const settingsOpen =
+        settingsModal.classList.contains("open");
+
+      if (!helpOpen && !settingsOpen) {
+        backdrop.hidden = true;
+        document.body.classList.remove("panel-open");
+      }
+    }
+
+    // =====================================================
     // OPEN BUTTONS
-    // =========================================
+    // =====================================================
 
-    helpButton?.addEventListener("click", function (event) {
-      event.preventDefault();
-      event.stopPropagation();
+    if (helpButton) {
+      helpButton.addEventListener("click", function (event) {
+        event.preventDefault();
+        event.stopPropagation();
 
-      openHelp();
+        openHelp();
+      });
+    }
+
+    if (settingsButton) {
+      settingsButton.addEventListener("click", function (event) {
+        event.preventDefault();
+        event.stopPropagation();
+
+        openSettings();
+      });
+    }
+
+    // =====================================================
+    // X BUTTONS
+    // =====================================================
+
+    if (closeHelp) {
+      closeHelp.addEventListener("click", function (event) {
+        event.preventDefault();
+        event.stopPropagation();
+
+        closeHelpPanel();
+      });
+    }
+
+    if (closeSettings) {
+      closeSettings.addEventListener("click", function (event) {
+        event.preventDefault();
+        event.stopPropagation();
+
+        closeSettingsPanel();
+      });
+    }
+
+    // =====================================================
+    // CLICK ON BACKDROP
+    // =====================================================
+
+    backdrop.addEventListener("click", function () {
+      closeAll();
     });
 
-    settingsButton?.addEventListener("click", function (event) {
-      event.preventDefault();
-      event.stopPropagation();
-
-      openSettings();
-    });
-
-    // =========================================
-    // CLOSE BUTTONS
-    // =========================================
-
-    closeHelp?.addEventListener("click", function (event) {
-      event.stopPropagation();
-      closeHelpPanel();
-    });
-
-    closeSettings?.addEventListener("click", function (event) {
-      event.stopPropagation();
-      closeSettingsPanel();
-    });
-
-    // =========================================
-    // CLICK ON DARK BACKDROP
-    // =========================================
-
-    backdrop.addEventListener("click", closeAll);
-
-    // =========================================
-    // PREVENT CLICKS INSIDE MODALS FROM CLOSING
-    // =========================================
+    // =====================================================
+    // CLICK OUTSIDE SETTINGS CARD
+    // =====================================================
 
     settingsModal.addEventListener("click", function (event) {
-      event.stopPropagation();
+      /*
+        settingsModal ocupa todo el área del modal.
+
+        Si el usuario hace clic directamente sobre esa área
+        oscura y NO sobre el cuadro interior, event.target
+        será settingsModal.
+      */
+
+      if (event.target === settingsModal) {
+        closeSettingsPanel();
+      }
     });
+
+    // =====================================================
+    // HELP DRAWER
+    // =====================================================
 
     helpDrawer.addEventListener("click", function (event) {
+      /*
+        Evita que un clic dentro del panel de ayuda
+        se propague hacia otros elementos.
+      */
+
       event.stopPropagation();
     });
 
-    // =========================================
-    // CLICK OUTSIDE PANEL / MODAL
-    // =========================================
-
-    document.addEventListener("click", function (event) {
-
-      // SETTINGS
-      if (settingsModal.classList.contains("open")) {
-
-        const clickedInsideSettings =
-          settingsModal.contains(event.target);
-
-        const clickedSettingsButton =
-          settingsButton?.contains(event.target);
-
-        if (
-          !clickedInsideSettings &&
-          !clickedSettingsButton
-        ) {
-          closeSettingsPanel();
-        }
-      }
-
-      // HELP
-      if (helpDrawer.classList.contains("open")) {
-
-        const clickedInsideHelp =
-          helpDrawer.contains(event.target);
-
-        const clickedHelpButton =
-          helpButton?.contains(event.target);
-
-        if (
-          !clickedInsideHelp &&
-          !clickedHelpButton
-        ) {
-          closeHelpPanel();
-        }
-      }
-
-    });
-
-    // =========================================
+    // =====================================================
     // ESC KEY
-    // =========================================
+    // =====================================================
 
     document.addEventListener("keydown", function (event) {
       if (event.key === "Escape") {
@@ -186,32 +191,40 @@
       }
     });
 
-    // =========================================
+    // =====================================================
     // SETTINGS
-    // =========================================
+    // =====================================================
 
     const theme = byId("themeSetting");
     const language = byId("languageSetting");
     const units = byId("defaultUnitsSetting");
 
-    function resolvedTheme(value) {
+    // =====================================================
+    // THEME
+    // =====================================================
 
+    function resolvedTheme(value) {
       if (value !== "system") {
         return value;
       }
 
-      return (
+      const prefersDark =
         window.matchMedia &&
-        window.matchMedia("(prefers-color-scheme: dark)").matches
-      )
+        window.matchMedia(
+          "(prefers-color-scheme: dark)"
+        ).matches;
+
+      return prefersDark
         ? "dark"
         : "light";
     }
 
     function applyTheme(value) {
+      const resolved =
+        resolvedTheme(value);
 
       document.documentElement.dataset.theme =
-        resolvedTheme(value);
+        resolved;
 
       localStorage.setItem(
         "regTool.theme",
@@ -219,63 +232,93 @@
       );
     }
 
-    // =========================================
-    // THEME
-    // =========================================
-
     const storedTheme =
-      localStorage.getItem("regTool.theme") || "light";
+      localStorage.getItem("regTool.theme") ||
+      "light";
 
     if (theme) {
+      theme.value =
+        storedTheme;
 
-      theme.value = storedTheme;
-
-      applyTheme(storedTheme);
+      applyTheme(
+        storedTheme
+      );
 
       theme.addEventListener(
         "change",
         function () {
-          applyTheme(theme.value);
+          applyTheme(
+            theme.value
+          );
         }
       );
     }
 
-    // =========================================
+    // =====================================================
+    // FOLLOW SYSTEM THEME
+    // =====================================================
+
+    if (window.matchMedia) {
+      const systemTheme =
+        window.matchMedia(
+          "(prefers-color-scheme: dark)"
+        );
+
+      systemTheme.addEventListener(
+        "change",
+        function () {
+          const stored =
+            localStorage.getItem(
+              "regTool.theme"
+            );
+
+          if (stored === "system") {
+            applyTheme("system");
+          }
+        }
+      );
+    }
+
+    // =====================================================
     // LANGUAGE
-    // =========================================
+    // =====================================================
 
     if (language) {
+      const storedLanguage =
+        localStorage.getItem(
+          "regTool.language"
+        ) || "es";
 
       language.value =
-        localStorage.getItem("regTool.language") || "es";
+        storedLanguage;
 
       language.addEventListener(
         "change",
         function () {
-
           localStorage.setItem(
             "regTool.language",
             language.value
           );
-
         }
       );
     }
 
-    // =========================================
+    // =====================================================
     // DEFAULT UNITS
-    // =========================================
+    // =====================================================
 
     if (units) {
+      const storedUnits =
+        localStorage.getItem(
+          "regTool.defaultUnits"
+        ) || "metric";
 
       units.value =
-        localStorage.getItem("regTool.defaultUnits") ||
-        "metric";
+        storedUnits;
 
       units.addEventListener(
         "change",
         function () {
-
           localStorage.setItem(
             "regTool.defaultUnits",
             units.value
@@ -285,7 +328,6 @@
             byId("unitSystem");
 
           if (mainUnits) {
-
             mainUnits.value =
               units.value;
 
@@ -298,27 +340,21 @@
               )
             );
           }
-
         }
       );
     }
   }
 
-  // =========================================
-  // START
-  // =========================================
+  // =====================================================
+  // INITIALIZE
+  // =====================================================
 
   if (document.readyState === "loading") {
-
     document.addEventListener(
       "DOMContentLoaded",
       initUiControls
     );
-
   } else {
-
     initUiControls();
-
   }
-
 })();
