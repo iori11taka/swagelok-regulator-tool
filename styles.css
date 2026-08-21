@@ -1489,3 +1489,57 @@ html[data-theme="dark"] .calculate-area > div:not(.calculate-mascot-wrap) strong
 html[data-theme="dark"] .calculate-area > div:not(.calculate-mascot-wrap) p {
   color: #aebdca !important;
 }
+
+
+/* =========================================================
+   v1.6 OFFICIAL HEADER LOGO
+========================================================= */
+.brand-company{
+  min-width:112px;
+  justify-content:center;
+}
+.brand-logo-image{
+  display:block;
+  width:108px;
+  height:27px;
+  object-fit:contain;
+  object-position:left center;
+  flex:0 0 auto;
+}
+.brand-company small{
+  margin-top:1px;
+  padding-left:1px;
+}
+
+/* The S application mark remains the product icon; the supplied
+   Swagelok artwork is now the corporate wordmark. */
+@media (min-width:1181px) and (max-height:820px){
+  .brand-logo-image{
+    width:96px;
+    height:24px;
+  }
+  .brand-company{
+    min-width:100px;
+  }
+}
+
+@media (max-width:620px){
+  .brand-company{
+    display:flex !important;
+    min-width:82px;
+  }
+  .brand-logo-image{
+    width:80px;
+    height:20px;
+  }
+  .brand-company small{
+    font-size:8px;
+    margin-top:1px;
+  }
+  .brand-divider{
+    display:none;
+  }
+  .brand-tool{
+    font-size:13px;
+  }
+}
