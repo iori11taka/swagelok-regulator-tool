@@ -2034,3 +2034,37 @@ html[data-theme="dark"] .selection-legend{
   color:#b8c5d1 !important;
   border-color:#304354 !important;
 }
+
+
+/* =========================================================
+   v1.9 REVIEW CALLOUT — DARK CONTRAST FIX
+   Corrige el globo "REVISIÓN TÉCNICA" del resumen de candidatos.
+========================================================= */
+
+html[data-theme="dark"] .result-mascot-copy{
+  background:#14212d !important;
+  border:1px solid #3a4e60 !important;
+  color:#aebdca !important;
+  box-shadow:
+    0 8px 20px rgba(0,0,0,.16),
+    inset 0 1px 0 rgba(255,255,255,.02);
+}
+
+html[data-theme="dark"] .result-mascot-copy span{
+  color:#ff4b52 !important;
+}
+
+html[data-theme="dark"] .result-mascot-copy strong{
+  color:#e8f0f6 !important;
+}
+
+/* Mantener también buen contraste si el texto interno cambia a p/small */
+html[data-theme="dark"] .result-mascot-copy p,
+html[data-theme="dark"] .result-mascot-copy small{
+  color:#aebdca !important;
+}
+
+/* Light mode: slightly softer, more professional card */
+.result-mascot-copy{
+  box-shadow:0 7px 18px rgba(20,45,72,.06);
+}
