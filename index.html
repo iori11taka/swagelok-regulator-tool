@@ -1,0 +1,265 @@
+<!DOCTYPE html>
+<html lang="es">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="theme-color" content="#0b1220" />
+  <title>Swagelok Regulator Selection Tool</title>
+  <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 64 64%22><rect width=%2264%22 height=%2264%22 rx=%2214%22 fill=%22%23e31b23%22/><text x=%2232%22 y=%2242%22 font-size=%2234%22 text-anchor=%22middle%22 fill=%22white%22 font-family=%22Arial%22 font-weight=%22700%22>S</text></svg>">
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <header class="topbar">
+    <a class="brand" href="#" aria-label="Swagelok Perú · Regulator Selection Tool">
+      <span class="brand-mark">S</span>
+      <span class="brand-company">
+        <strong>Swagelok</strong>
+        <small>Perú</small>
+      </span>
+      <span class="brand-divider" aria-hidden="true"></span>
+      <span class="brand-tool">Regulator Selection Tool</span>
+    </a>
+
+    <nav class="tool-nav" aria-label="Herramientas">
+      <button class="mode-card active" type="button" data-mode="sizing">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 4h6v6H4zM14 4h6v6h-6zM4 14h6v6H4zM14 14h6v6h-6z"/></svg>
+        <span id="navSizingLabel">Regulator Sizing</span>
+      </button>
+      <button class="mode-card" type="button" data-mode="rhps">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M7 7h11l-3-3m3 3-3 3M17 17H6l3 3m-3-3 3-3"/></svg>
+        <span id="navRhpsLabel">RHPS Converter</span>
+      </button>
+    </nav>
+
+    <div class="topbar-actions">
+      <button id="helpButton" class="icon-action" type="button" aria-label="Ayuda">
+        <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="12" r="9"/><path d="M9.8 9a2.4 2.4 0 1 1 3.6 2.1c-.9.5-1.4 1.1-1.4 2.2M12 17h.01"/></svg>
+        <span id="helpLabel">Ayuda</span>
+      </button>
+      <span class="header-separator" aria-hidden="true"></span>
+      <button id="settingsButton" class="settings-action" type="button" aria-label="Configuración">
+        <svg viewBox="0 0 24 24" aria-hidden="true" class="gear-icon">
+          <circle cx="12" cy="12" r="3.25"></circle>
+          <path d="M19.1 13.1c.04-.36.06-.73.06-1.1s-.02-.74-.06-1.1l2-1.55-1.9-3.29-2.36.95a8.3 8.3 0 0 0-1.9-1.1L14.58 3h-3.8l-.36 2.91c-.68.27-1.32.64-1.9 1.1l-2.36-.95-1.9 3.29 2 1.55c-.04.36-.06.73-.06 1.1s.02.74.06 1.1l-2 1.55 1.9 3.29 2.36-.95c.58.46 1.22.83 1.9 1.1l.36 2.91h3.8l.36-2.91a8.3 8.3 0 0 0 1.9-1.1l2.36.95 1.9-3.29-2-1.55Z"></path>
+        </svg>
+      </button>
+      <button id="newCalculationButton" class="primary-top-button" type="button">Nuevo cálculo</button>
+    </div>
+  </header>
+
+  <main class="app-shell">
+    <section id="sizingSection">
+      <div class="page-intro page-intro-with-mascot">
+        <div class="intro-copy">
+          <span class="eyebrow">PROCESS REGULATORS</span>
+          <h1 id="pageTitle">Selección de reguladores</h1>
+          <p id="pageSubtitle">Configure las condiciones del proceso para obtener el regulador óptimo.</p>
+        </div>
+        <div class="mascot-guide" aria-hidden="true">
+          <div class="mascot-speech"><span>Asistente de selección</span><strong>Completa las condiciones y calculamos juntos.</strong></div>
+          <img src="assets/mascot-laptop.png" alt="" />
+        </div>
+      </div>
+
+      <div class="stepper" aria-label="Progreso del cálculo">
+        <div class="step active" data-step="1"><span>1</span><strong id="step1Label">Configuración del proceso</strong></div>
+        <div class="step" data-step="2"><span>2</span><strong id="step2Label">Condiciones de operación</strong></div>
+        <div class="step" data-step="3"><span>3</span><strong id="step3Label">Bore recomendado</strong></div>
+        <div class="step" data-step="4"><span>4</span><strong id="step4Label">Selección de regulador</strong></div>
+      </div>
+
+      <div class="workspace-grid">
+        <div class="main-column">
+          <section class="section-card">
+            <div class="section-header">
+              <div class="section-title-wrap"><span class="section-number">01</span><h2>Configuración del proceso</h2></div>
+              <span class="source-chip">
+                <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h9l4 4v14H6zM15 3v5h5M9 12h7M9 16h7"/></svg>
+                Entradas del Excel original
+              </span>
+            </div>
+
+            <div class="form-grid">
+              <div class="form-group">
+                <label for="unitSystem">Sistema de unidades <button class="info-button" type="button" data-tooltip="Cambia de forma coordinada las unidades de presión, caudal, velocidad y diámetro. Metric usa barg, Nm³/h o L/min, m/s y mm. Imperial usa psig, SCFM o US gal/min, ft/s e inch.">i</button></label>
+                <div class="field-with-icon">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 15 15 4l5 5L9 20H4zM12 7l5 5"/></svg>
+                  <select id="unitSystem"><option value="metric">Metric</option><option value="imperial">Imperial</option></select>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="fluidType">Tipo de fluido <button class="info-button" type="button" data-tooltip="Gas y Liquid usan ecuaciones diferentes para convertir el caudal a velocidad y diámetro requerido. Esta selección también cambia la unidad de caudal.">i</button></label>
+                <div class="field-with-icon">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3c3 4 6 7.1 6 11a6 6 0 1 1-12 0c0-3.9 3-7 6-11Z"/></svg>
+                  <select id="fluidType"><option value="gas">Gas</option><option value="liquid">Liquid</option></select>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="fluid">Media <button class="info-button" type="button" data-tooltip="Fluido específico utilizado por el Excel para aplicar su factor de corrección o densidad. Esta propiedad se muestra abajo para que puedas verificar qué valor usa el cálculo.">i</button></label>
+                <div class="field-with-icon">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><circle cx="12" cy="5" r="2.2"/><circle cx="6" cy="17" r="2.2"/><circle cx="18" cy="17" r="2.2"/><path d="M10.7 6.8 7.3 15M13.3 6.8l3.4 8.2M8.2 17h7.6"/></svg>
+                  <select id="fluid"></select>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="maxVelocity">Downstream velocity <button class="info-button" type="button" data-tooltip="Velocidad máxima de diseño aguas abajo del regulador. El Excel incluye recomendaciones por gas; puedes aceptar la sugerencia o modificarla según el criterio del proyecto.">i</button></label>
+                <div class="input-unit"><input id="maxVelocity" type="number" min="0.001" step="0.1" value="30" /><span id="velocityUnit" class="unit-label">m/s</span></div>
+                <small id="velocitySuggestion" class="field-helper"></small>
+              </div>
+
+              <div class="form-group">
+                <label for="outletPipeType">Outlet pipe / tube <button class="info-button" type="button" data-tooltip="Tabla de diámetro interno que se utilizará después para comparar el bore requerido con tamaños disponibles. Las opciones provienen de DataLookup del archivo original.">i</button></label>
+                <div class="field-with-icon">
+                  <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M5 6h8v4H9v8H5zM13 8h6v8h-4v-4h-2z"/></svg>
+                  <select id="outletPipeType"><option value="Tube fitting">Tube fitting</option><option value="SCH40">SCH40</option><option value="SCH80">SCH80</option><option value="SCH160">SCH160</option></select>
+                </div>
+              </div>
+
+              <div class="form-group">
+                <label for="droop">Rated flow at % droop <button class="info-button" type="button" data-tooltip="Porcentaje de droop al que se compara el rated flow del regulador. El Excel original permite 2.5 %, 5 %, 10 % y 20 %, siendo 20 % el valor por defecto.">i</button></label>
+                <div class="input-unit"><select id="droop"><option value="2.5">2.5</option><option value="5">5</option><option value="10">10</option><option value="20" selected>20</option></select><span class="unit-label">%</span></div>
+                <small class="field-helper">Valor por defecto del selector original: 20 %</small>
+              </div>
+            </div>
+
+            <div class="property-strip">
+              <div><span id="fluidPropertyLabel">Factor de corrección</span><strong id="fluidPropertyValue">1.00</strong></div>
+              <div><span>Fluido seleccionado</span><strong id="fluidPropertyName">Nitrogen</strong></div>
+              <div><span>Fuente</span><strong>DataLookup</strong></div>
+              <button class="info-button" type="button" data-tooltip="Esta franja no añade una entrada nueva: solo hace visible una propiedad que el Excel usa internamente. Así conservamos la información sin obligarte a ingresarla manualmente.">i</button>
+            </div>
+          </section>
+
+          <section class="section-card">
+            <div class="section-header">
+              <div class="section-title-wrap"><span class="section-number blue">02</span><h2>Condiciones de operación</h2></div>
+              <button class="info-button" type="button" data-tooltip="El Excel define Worst Case como Pin mínima, Pout mínima y Flow máximo; Best Case como Pin máxima, Pout máxima y Flow mínimo.">i</button>
+            </div>
+            <div class="conditions-table">
+              <div class="conditions-row conditions-title"><div>Parámetro</div><div><strong>Worst Case</strong><small>Condición exigente</small></div><div><strong>Best Case</strong><small>Condición opuesta</small></div></div>
+              <div class="conditions-row"><div class="parameter-name">Inlet Pressure <button class="info-button" type="button" data-tooltip="Worst Case utiliza la presión de entrada mínima. Best Case utiliza la presión de entrada máxima.">i</button></div><div class="condition-input"><input id="worstInletPressure" type="number" step="any" value="0" /><span id="worstPressureUnit" class="unit-box">barg</span><small>MIN</small></div><div class="condition-input"><input id="bestInletPressure" type="number" step="any" value="0" /><span id="bestPressureUnit" class="unit-box">barg</span><small>MAX</small></div></div>
+              <div class="conditions-row"><div class="parameter-name">Outlet Pressure <button class="info-button" type="button" data-tooltip="Worst Case utiliza la presión de salida mínima. Best Case utiliza la presión de salida máxima. La salida debe ser menor que la entrada en ambos casos.">i</button></div><div class="condition-input"><input id="worstOutletPressure" type="number" step="any" value="0" /><span class="unit-box pressure-unit">barg</span><small>MIN</small></div><div class="condition-input"><input id="bestOutletPressure" type="number" step="any" value="0" /><span class="unit-box pressure-unit">barg</span><small>MAX</small></div></div>
+              <div class="conditions-row"><div class="parameter-name">Flow rate <button class="info-button" type="button" data-tooltip="Worst Case usa el caudal máximo; Best Case usa el caudal mínimo. Para gas el Excel trabaja con caudal normalizado; para líquido usa caudal volumétrico.">i</button></div><div class="condition-input"><input id="worstFlow" type="number" min="0" step="any" value="0" /><span id="worstFlowUnit" class="unit-box">Nm³/h</span><small>MAX</small></div><div class="condition-input"><input id="bestFlow" type="number" min="0" step="any" value="0" /><span id="bestFlowUnit" class="unit-box">Nm³/h</span><small>MIN</small></div></div>
+            </div>
+            <div id="validationMessage" class="validation-message hidden" role="alert"></div>
+          </section>
+
+          <section class="section-card bore-section hidden">
+            <div class="section-header">
+              <div class="section-title-wrap"><span class="section-number navy">03</span><h2>Bore recomendado para mantener la velocidad</h2></div>
+              <button class="info-button" type="button" data-tooltip="Este resultado replica las celdas E17 y L17 del Excel. Es el diámetro interno requerido para que la velocidad aguas abajo no supere el límite seleccionado.">i</button>
+            </div>
+            <div class="bore-grid">
+              <article class="bore-card"><span>WORST CASE</span><strong id="worstBore">—</strong><small id="worstBoreUnit">mm</small></article>
+              <article class="bore-card"><span>BEST CASE</span><strong id="bestBore">—</strong><small id="bestBoreUnit">mm</small></article>
+              <article class="bore-card highlighted"><span>BORE DE DISEÑO</span><strong id="designBore">—</strong><small id="designBoreUnit">mm</small></article>
+            </div>
+            <div id="pipeRecommendation" class="pipe-recommendation muted-result">Ingresa condiciones y pulsa <strong>Calcular</strong> para comparar el bore requerido con la tabla seleccionada.</div>
+          </section>
+
+          <div class="calculate-area">
+            <div class="advisory-icon" aria-hidden="true">
+              <svg viewBox="0 0 24 24"><path d="M9 21h6M10 17h4M8.5 14.5A6 6 0 1 1 15.5 14.5c-1 .8-1.5 1.6-1.5 2.5h-4c0-.9-.5-1.7-1.5-2.5Z"/></svg>
+            </div>
+            <div class="calculate-copy"><span>Listo para evaluar</span><p>El motor conserva la lógica migrada del Excel.<br>Los resultados de sizing son un punto de partida y deben contrastarse con catálogo y Flow Curve Generator.</p></div>
+            <div class="calculate-actions">
+              <img class="mascot-action" src="assets/mascot-technician.png" alt="" aria-hidden="true" />
+              <button id="calculateButton" class="primary-button" type="button"><span class="calc-button-icon">▦</span> Calcular selección</button>
+            </div>
+          </div>
+        </div>
+
+        <aside class="summary-sidebar" aria-label="Resumen del cálculo">
+          <div class="summary-card sticky-card">
+            <div class="summary-card-header">
+              <div class="summary-title"><span class="summary-icon red"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M6 3h9l4 4v14H6zM15 3v5h5M9 12h6M9 16h6"/></svg></span><h2>Resumen del cálculo</h2></div>
+              <span id="sidebarStatus" class="pending-badge">Pendiente</span>
+            </div>
+            <div class="summary-section-label">PROCESO</div>
+            <div class="summary-list">
+              <div><span>Media</span><strong id="sidebarFluid">Nitrogen</strong></div>
+              <div><span id="sidebarPropertyLabel">Factor de corrección</span><strong id="sidebarPropertyValue">1.000</strong></div>
+              <div><span>Downstream velocity</span><strong id="sidebarVelocity">30 m/s</strong></div>
+              <div><span>Rated flow at droop</span><strong id="sidebarDroop">20 %</strong></div>
+            </div>
+            <div class="summary-divider"></div>
+            <div class="summary-section-label bore-label">BORE <span>(Aún no calculado)</span></div>
+            <div class="bore-summary-row"><span>Worst bore</span><strong class="red-value"><span id="sidebarWorstBore">—</span> <small id="sidebarBoreUnit1">mm</small></strong></div>
+            <div class="bore-summary-row"><span>Best bore</span><strong class="navy-value"><span id="sidebarBestBore">—</span> <small id="sidebarBoreUnit2">mm</small></strong></div>
+            <div class="design-summary"><span>Bore de diseño</span><strong><span id="sidebarDesignBore">—</span> <small id="sidebarBoreUnit3">mm</small></strong></div>
+            <div id="sidebarPipeRec" class="match-box muted-match"><span>Primera entrada que cumple</span><strong>Esperando cálculo</strong><small>Selecciona condiciones y pulsa Calcular.</small></div>
+          </div>
+
+          <div class="warning-card">
+            <span class="summary-icon blue"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 5 6v5c0 5 3 8.5 7 10 4-1.5 7-5 7-10V6zM12 8v5M12 16h.01"/></svg></span>
+            <div><strong>Advertencia importante</strong><p>Esta herramienta es para sizing y selección inicial. La selección final debe validarse con catálogo y Flow Curve Generator.</p></div>
+          </div>
+        </aside>
+      </div>
+
+      <section id="resultsSection" class="results-section hidden">
+        <div class="results-heading"><span class="eyebrow">RESULTADO DEL MOTOR</span><h2>Resumen técnico</h2></div>
+        <article class="result-card">
+          <div class="result-card-header"><div><span class="status-badge green">Cálculo completado</span><h3>Recommended Bore</h3><p>Resultado calculado con la misma estructura de conversión que el Excel original.</p></div></div>
+          <div id="calculationSummary" class="technical-summary"></div>
+          <div class="development-note"><strong>Motor migrado:</strong> Recommended Bore + Lockup Flow + Rated Flow + Choked Flow + Outlet Bore + Inlet MWP + Max Adj + SPE + Control Range. La herramienta conserva la advertencia del Excel: usar catálogo y Flow Curve Generator para datos de selección final.</div>
+        </article>
+
+        <section class="regulator-selection-results mascot-results-zone">
+          <div class="candidate-results-header"><div><span class="eyebrow">SELECCIÓN DE REGULADORES</span><h2>Evaluación de candidatos</h2><p>Se conserva toda la información técnica, pero cada criterio puede revisarse por candidato.</p></div><div class="candidate-side"><div class="result-mascot-copy"><span>Revisión técnica</span><strong>Compara los candidatos con el caso de diseño.</strong></div><img class="mascot-result" src="assets/mascot-fitting.png" alt="" aria-hidden="true" /><div class="candidate-overview"><strong id="candidateCount">0 candidatos</strong><div id="candidateSummary"></div></div></div></div>
+          <div class="selection-legend"><span><i class="legend-dot green"></i> Dentro de rango</span><span><i class="legend-dot amber"></i> Revisar</span><span><i class="legend-dot red"></i> Fuera de rango</span></div>
+          <div id="regulatorResults"></div>
+        </section>
+      </section>
+    </section>
+
+    <section id="rhpsSection" class="hidden">
+      <div class="page-intro"><span class="eyebrow">RHPS CONVERTER</span><h1>Conversión RHPS → Process Regulator</h1><p>Este módulo conservará la misma filosofía visual y mostrará cada parte del número de parte con contexto.</p></div>
+      <section class="section-card"><div class="section-header"><div class="section-title-wrap"><span class="section-number">RHPS</span><h2>RHPS → Process Regulator</h2></div></div><div class="rhps-placeholder mascot-rhps-zone"><img class="mascot-rhps" src="assets/mascot-walking.png" alt="" aria-hidden="true" /><div class="placeholder-icon">⇄</div><h3>Módulo preparado</h3><p>El archivo <code>js/rhps-converter.js</code> ya tiene una interfaz base, pero la lógica completa se incorporará después de validar la selección de Process Regulators. No se muestran equivalencias ficticias.</p></div></section>
+    </section>
+  </main>
+
+
+  <div id="uiBackdrop" class="ui-backdrop" hidden></div>
+
+  <aside id="helpDrawer" class="help-drawer" aria-hidden="true" aria-labelledby="helpDrawerTitle">
+    <div class="panel-head">
+      <div><span class="panel-kicker">REGULATOR SELECTION TOOL</span><h2 id="helpDrawerTitle">Ayuda</h2></div>
+      <button id="closeHelpButton" class="panel-close" type="button" aria-label="Cerrar ayuda">×</button>
+    </div>
+    <div class="panel-scroll">
+      <div class="help-hero">
+        <img src="assets/mascot-laptop.png" alt="" aria-hidden="true" />
+        <div><strong id="helpHeroTitle">Guía rápida</strong><p id="helpHeroText">Completa la configuración, define Worst Case y Best Case y luego pulsa Calcular selección.</p></div>
+      </div>
+      <section class="help-section"><span>01</span><div><h3 id="helpS1Title">Configura el proceso</h3><p id="helpS1Text">Selecciona unidades, tipo de fluido, media, velocidad aguas abajo, tipo de tubería y droop.</p></div></section>
+      <section class="help-section"><span>02</span><div><h3 id="helpS2Title">Define las condiciones</h3><p id="helpS2Text"><b>Worst Case:</b> Pin mínima, Pout mínima y caudal máximo. <b>Best Case:</b> Pin máxima, Pout máxima y caudal mínimo.</p></div></section>
+      <section class="help-section"><span>03</span><div><h3 id="helpS3Title">Interpreta el bore</h3><p id="helpS3Text">El Bore de diseño es el mayor entre Worst y Best. La herramienta busca la primera entrada de pipe/tube cuyo ID cumple el diámetro requerido.</p></div></section>
+      <section class="help-section"><span>04</span><div><h3 id="helpS4Title">Revisa candidatos</h3><p id="helpS4Text">Verde = dentro de rango, ámbar = revisar, rojo = fuera de rango. Despliega cada regulador para revisar Lockup, Rated Flow, Choked Flow, MWP y Max Adj.</p></div></section>
+      <div class="help-callout"><strong id="helpWarningTitle">Importante</strong><p id="helpWarningText">La herramienta sirve para sizing y selección inicial. La selección final debe validarse con catálogo y Flow Curve Generator.</p></div>
+    </div>
+  </aside>
+
+  <div id="settingsModal" class="settings-modal" role="dialog" aria-modal="true" aria-labelledby="settingsTitle" aria-hidden="true">
+    <div class="settings-card">
+      <div class="panel-head">
+        <div><span class="panel-kicker">PREFERENCIAS</span><h2 id="settingsTitle">Configuración</h2></div>
+        <button id="closeSettingsButton" class="panel-close" type="button" aria-label="Cerrar configuración">×</button>
+      </div>
+      <div class="settings-body">
+        <label class="setting-row"><span><strong id="themeSettingTitle">Apariencia</strong><small id="themeSettingText">Elige cómo quieres visualizar la herramienta.</small></span><select id="themeSetting"><option value="light">Claro</option><option value="dark">Oscuro</option><option value="system">Sistema</option></select></label>
+        <label class="setting-row"><span><strong id="languageSettingTitle">Idioma</strong><small id="languageSettingText">Idioma de la interfaz y de la ayuda.</small></span><select id="languageSetting"><option value="es">Español</option><option value="en">English</option></select></label>
+        <label class="setting-row"><span><strong id="unitsSettingTitle">Unidades predeterminadas</strong><small id="unitsSettingText">Se aplicarán al iniciar y al crear un nuevo cálculo.</small></span><select id="defaultUnitsSetting"><option value="metric">Metric</option><option value="imperial">Imperial</option></select></label>
+        <div class="settings-note"><strong id="settingsNoteTitle">Preferencias locales</strong><p id="settingsNoteText">Estas opciones se guardan únicamente en este navegador mediante localStorage.</p></div>
+      </div>
+    </div>
+  </div>
+
+  <div id="tooltip" class="tooltip" role="tooltip"></div>
+  <script src="ui-controls.js"></script>
+  <script type="module" src="app.js"></script>
+</body>
+</html>
